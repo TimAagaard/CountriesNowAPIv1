@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-import express, { Express, Request, Response } from "express";
+import { Request, Response } from "express";
 
-const prisma: PrismaClient = new PrismaClient();
-const app: Express = express();
-const port: number | string = process.env.PORT ?? 3000;
+import { app, startExpressServer } from "./configs/express.js";
+import { prisma } from "./configs/prisma.js";
 
 app.get("/api/v0.2/countries/states", async (req: Request, res: Response) => {
     const countries = await prisma.country.findMany({
@@ -33,6 +31,4 @@ app.get("/api/v0.2/countries/states", async (req: Request, res: Response) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`App listening on port ${port.toString()}`);
-});
+startExpressServer();
