@@ -1,0 +1,8 @@
+model City {
+    id          Int         @id @default(autoincrement())
+    stateId     Int
+    state       State       @relation(fields: [stateId], references: [id])
+    name        String
+    latitude    Float
+    longitude   Float
+}

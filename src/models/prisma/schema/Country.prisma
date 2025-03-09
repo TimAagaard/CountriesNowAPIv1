@@ -1,0 +1,17 @@
+model Country {
+    id              Int             @id @default(autoincrement())
+    name            String
+    iso2            String
+    iso3            String
+    latitude        Float
+    longitude       Float
+    continent       String
+    currencyName    String
+    currencyCode    String
+    unicode         String
+    capital         String
+    flagSvg         String
+    dialCode        String
+    states          State[]
+    populations     Population[]
+}

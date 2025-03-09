@@ -1,0 +1,8 @@
+model State {
+    id          Int         @id @default(autoincrement())
+    countryId   Int
+    country     Country     @relation(fields: [countryId], references: [id])
+    name        String
+    code        String
+    cities      City[]
+}
