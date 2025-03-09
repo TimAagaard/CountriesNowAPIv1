@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 
 import { app, startExpressServer } from "./configs/express.js";
 import { prisma } from "./configs/prisma.js";
+import { versionRouter } from "./routes/versionRouter.js";
+
+app.use("/api", versionRouter);
 
 app.get("/api/v0.2/countries/states", async (req: Request, res: Response) => {
     const countries = await prisma.country.findMany({
