@@ -47,7 +47,9 @@ export const v1Controller = {
 
         const response = new APIResponse<typeof countries>(
             countries,
-            "Countries and states retrieved",
+            country || iso2
+                ? `States in ${countries[0].name} retrieved`
+                : "Countries and states retrieved",
         );
 
         res.send(response).status(200);
