@@ -3,11 +3,11 @@ import Respond from "../types/Respond.js";
 export default class APIResponse<T> {
     private response: Respond<T>;
 
-    public constructor(data: T) {
+    public constructor(data: T, msg = "") {
         this.response = {
             data: data,
             error: false,
-            msg: "",
+            msg: msg,
         };
     }
 
