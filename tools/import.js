@@ -124,14 +124,14 @@ async function importData() {
 
     let countries2 = new Map();
     countries.forEach((c) => {
-        countries2.set(c.dialCode, c);
+        countries2.set(c.name, c);
     });
 
     CountriesAndFlag.forEach((cf) => {
-        if (countries2.has(cf.number.substring(1))) {
-            const c = countries2.get(cf.number.substring(1));
+        if (countries2.has(cf.name)) {
+            const c = countries2.get(cf.name);
             c.flagSvg = cf.flag;
-            countries2.set(cf.number.substring(1), c);
+            countries2.set(cf.name, c);
         }
     });
 
