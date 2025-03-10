@@ -1,3 +1,4 @@
+import APIResponse from "#utils/APIResponse.js";
 import { Request, Response } from "express";
 
 import { app, startExpressServer } from "./configs/express.js";
@@ -27,11 +28,8 @@ app.get("/api/v0.2/countries/states", async (req: Request, res: Response) => {
         },
     });
 
-    try {
-        res.send(countries).status(200);
-    } catch (err) {
-        console.error(err);
-    }
+    const response = new APIResponse<typeof countries>(countries);
+    res.send(response.success()).status(200);
 });
 
 startExpressServer();
