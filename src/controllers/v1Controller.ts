@@ -59,9 +59,50 @@ export const v1Controller = {
                 return;
             }
         }
+    },
 
-        res.send().status(500);
-        return;
+    getCountryRandom: async (req: Request, res: Response) => {
+        const minMax = await prisma.country.aggregate({
+            _max: {
+                id: true,
+            },
+            _min: {
+                id: true,
+            },
+        });
+
+        const minID = minMax._min.id;
+        const maxID = minMax._max.id;
+
+        if (typeof minID === "number" && typeof maxID === "number") {
+            const randomID = Math.floor(
+                Math.random() * (maxID - minID + 1) + minID,
+            );
+            const country = await prisma.country.findUnique({
+                select: {
+                    dialCode: true,
+                    iso2: true,
+                    latitude: true,
+                    longitude: true,
+                    name: true,
+                },
+                where: {
+                    id: randomID,
+                },
+            });
+            const response = new APIResponse(
+                country,
+                "Retrieved random country",
+            ).success();
+            res.status(200).send(response);
+            return;
+        } else {
+            const response = new APIResponse(null).error(
+                "Unable to find a random country",
+            );
+            res.status(404).send(response);
+            return;
+        }
     },
 
     getStatesByCountryOrISO2: async (req: Request, res: Response) => {
