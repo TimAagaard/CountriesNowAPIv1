@@ -21,5 +21,5 @@ v1Router.get("/population/filter");
 v1Router.get("/positions");
 v1Router.get("/positions/range");
 v1Router.get("/random");
-v1Router.get("/states", v1Controller.getStates);
-v1Router.get("/state/cities");
+v1Router.get("/states", v1Controller.getStatesByCountryOrISO2);
+v1Router.get("/state/cities", v1Controller.getCitiesByStateAndCountry);
