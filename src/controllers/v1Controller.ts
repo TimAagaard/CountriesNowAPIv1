@@ -105,6 +105,27 @@ export const v1Controller = {
         }
     },
 
+    getPopulations: async (req: Request, res: Response) => {
+        const populations = await prisma.country.findMany({
+            select: {
+                iso3: true,
+                name: true,
+                populations: {
+                    orderBy: {
+                        year: "asc",
+                    },
+                    select: {
+                        value: true,
+                        year: true,
+                    },
+                },
+            },
+        });
+
+        const response = new APIResponse(populations, "").success();
+        res.status(200).send(response);
+    },
+
     getStatesByCountryOrISO2: async (req: Request, res: Response) => {
         const { country, iso2 } = req.query;
         let whereClause = null;
