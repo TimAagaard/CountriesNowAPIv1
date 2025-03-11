@@ -8,7 +8,7 @@ v1Router.get("/", (_req, res) => {
 });
 v1Router.get("/capital");
 v1Router.get("/cities", v1Controller.getCitiesByCountry);
-v1Router.get("/codes");
+v1Router.get("/codes", v1Controller.getCountryCodes);
 v1Router.get("/currency");
 v1Router.get("/flag/images");
 v1Router.get("/flag/unicode");

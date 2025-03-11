@@ -111,6 +111,41 @@ export const v1Controller = {
         }
     },
 
+    getCountryCodes: async (req: Request, res: Response) => {
+        const { country, iso2 } = req.query;
+
+        let whereClause: Prisma.CountryWhereInput | undefined = undefined;
+        if (country) {
+            whereClause = {
+                name: {
+                    equals: country as string,
+                },
+            };
+        } else if (iso2) {
+            whereClause = {
+                iso2: {
+                    equals: (iso2 as string).toUpperCase(),
+                },
+            };
+        }
+
+        const countries = await prisma.country.findMany({
+            orderBy: {
+                name: "asc",
+            },
+            select: {
+                dialCode: true,
+                iso2: true,
+                iso3: true,
+                name: true,
+            },
+            where: whereClause,
+        });
+
+        const response = new APIResponse(countries, "").success();
+        res.status(200).send(response);
+    },
+
     getCountryRandom: async (req: Request, res: Response) => {
         const minMax = await prisma.country.aggregate({
             _max: {
