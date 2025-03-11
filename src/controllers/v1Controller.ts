@@ -142,6 +142,109 @@ export const v1Controller = {
         res.status(200).send(response);
     },
 
+    getPopulationsFiltered: async (req: Request, res: Response) => {
+        const { gt, limit, lt, order, orderBy, year } = req.query;
+
+        let limitVal: number | undefined;
+        if (limit) {
+            limitVal = parseInt(limit as string);
+        } else {
+            limitVal = undefined;
+        }
+
+        let gtVal: number | undefined;
+        if (gt) {
+            gtVal = parseInt(gt as string);
+        } else {
+            gtVal = undefined;
+        }
+
+        let ltVal: number | undefined;
+        if (lt) {
+            ltVal = parseInt(lt as string);
+        } else {
+            ltVal = undefined;
+        }
+
+        let orderVal: Prisma.SortOrder | undefined;
+        if (!order) {
+            orderVal = "asc";
+        } else if (order === "asc" || order === "desc") {
+            orderVal = order as string as Prisma.SortOrder;
+        } else {
+            orderVal = undefined;
+        }
+
+        let orderByVal: Prisma.PopulationOrderByWithRelationInput;
+        if (orderBy) {
+            if (orderBy !== "year" && orderBy !== "population") {
+                orderByVal = { year: orderVal };
+            } else {
+                if (orderBy === "year") {
+                    orderByVal = { year: orderVal };
+                } else {
+                    orderByVal = { value: orderVal };
+                }
+            }
+        } else {
+            orderByVal = { year: orderVal };
+        }
+
+        const countries = await prisma.country.findMany({
+            select: {
+                iso2: true,
+                iso3: true,
+                name: true,
+                populations: {
+                    orderBy: orderByVal,
+                    select: {
+                        value: true,
+                        year: true,
+                    },
+                    where: {
+                        year: {
+                            gt: gtVal,
+                            lt: ltVal,
+                        },
+                    },
+                },
+            },
+            take: limitVal,
+            where: {
+                NOT: {
+                    populations: {
+                        none: {},
+                    },
+                },
+            },
+        });
+
+        if (!gt && !lt) {
+            countries.forEach((country) => {
+                if (country.populations.length) {
+                    if (year) {
+                        country.populations = country.populations.filter(
+                            (population) =>
+                                population.year == parseInt(year as string),
+                        );
+                    } else {
+                        country.populations = [
+                            country.populations[country.populations.length - 1],
+                        ];
+                    }
+                } else {
+                    country.populations = [];
+                }
+            });
+        }
+
+        const response = new APIResponse(
+            countries,
+            "Filtered result",
+        ).success();
+        res.status(200).send(response);
+    },
+
     getStatesByCountryOrISO2: async (req: Request, res: Response) => {
         const { country, iso2 } = req.query;
         let whereClause = null;
