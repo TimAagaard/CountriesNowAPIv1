@@ -6,7 +6,7 @@ export const v1Router = express.Router();
 v1Router.get("/", (_req, res) => {
     res.send({ message: "v1 working" });
 });
-v1Router.get("/capital");
+v1Router.get("/capital", v1Controller.getCountryCapital);
 v1Router.get("/cities", v1Controller.getCitiesByCountry);
 v1Router.get("/codes", v1Controller.getCountryCodes);
 v1Router.get("/currency", v1Controller.getCountryCurrency);
