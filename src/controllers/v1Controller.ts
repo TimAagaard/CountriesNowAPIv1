@@ -108,6 +108,7 @@ export const v1Controller = {
     getPopulations: async (req: Request, res: Response) => {
         const populations = await prisma.country.findMany({
             select: {
+                iso2: true,
                 iso3: true,
                 name: true,
                 populations: {
