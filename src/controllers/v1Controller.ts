@@ -106,6 +106,20 @@ export const v1Controller = {
     },
 
     getPopulations: async (req: Request, res: Response) => {
+        const iso2 = req.query.iso2;
+
+        let whereClause: Prisma.CountryWhereInput;
+
+        if (iso2) {
+            whereClause = {
+                iso2: {
+                    equals: (iso2 as string).toUpperCase(),
+                },
+            };
+        } else {
+            whereClause = {};
+        }
+
         const populations = await prisma.country.findMany({
             select: {
                 iso2: true,
@@ -121,6 +135,7 @@ export const v1Controller = {
                     },
                 },
             },
+            where: whereClause,
         });
 
         const response = new APIResponse(populations, "").success();
