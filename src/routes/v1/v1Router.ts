@@ -11,7 +11,7 @@ v1Router.get("/cities", v1Controller.getCitiesByCountry);
 v1Router.get("/codes", v1Controller.getCountryCodes);
 v1Router.get("/currency", v1Controller.getCountryCurrency);
 v1Router.get("/flag/images", v1Controller.getCountryFlagImage);
-v1Router.get("/flag/unicode");
+v1Router.get("/flag/unicode", v1Controller.getCountryFlagUnicode);
 v1Router.get("/info");
 v1Router.get("/iso", v1Controller.getCountryISOCodes);
 v1Router.get("/population", v1Controller.getPopulations);
