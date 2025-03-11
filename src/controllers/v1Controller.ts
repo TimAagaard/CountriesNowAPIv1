@@ -4,6 +4,56 @@ import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 
 export const v1Controller = {
+    getCitiesByCountry: async (req: Request, res: Response) => {
+        const { country, iso2 } = req.query;
+
+        let whereClause: Prisma.CountryWhereInput;
+        if (iso2) {
+            whereClause = {
+                iso2: {
+                    equals: (iso2 as string).toUpperCase(),
+                },
+            };
+        } else if (country) {
+            whereClause = {
+                name: {
+                    equals: country as string,
+                },
+            };
+        } else {
+            const response = new APIResponse(null).error(
+                "One of the following fields are required: country, iso2",
+            );
+            res.status(400).send(response);
+            return;
+        }
+
+        const countries = await prisma.country.findFirst({
+            select: {
+                states: {
+                    select: {
+                        cities: true,
+                    },
+                },
+            },
+            where: whereClause,
+        });
+
+        const cities: string[] = [];
+        countries?.states.forEach((state) => {
+            state.cities.forEach((city) => {
+                cities.push(city.name);
+            });
+        });
+        cities.sort();
+
+        const citiesSet = [...new Set(cities)];
+
+        const response = new APIResponse(citiesSet, "").success();
+        res.status(200).send(response);
+        return;
+    },
+
     getCitiesByStateAndCountry: async (req: Request, res: Response) => {
         const { country, state } = req.query;
 
