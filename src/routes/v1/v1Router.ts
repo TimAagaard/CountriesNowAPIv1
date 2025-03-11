@@ -13,7 +13,7 @@ v1Router.get("/currency");
 v1Router.get("/flag/images");
 v1Router.get("/flag/unicode");
 v1Router.get("/info");
-v1Router.get("/iso");
+v1Router.get("/iso", v1Controller.getCountryISOCodes);
 v1Router.get("/population", v1Controller.getPopulations);
 v1Router.get("/population/cities");
 v1Router.get("/population/cities/filter");

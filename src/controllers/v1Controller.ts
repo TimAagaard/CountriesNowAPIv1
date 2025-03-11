@@ -146,6 +146,34 @@ export const v1Controller = {
         res.status(200).send(response);
     },
 
+    getCountryISOCodes: async (req: Request, res: Response) => {
+        const { country } = req.query;
+
+        let whereClause: Prisma.CountryWhereInput = {};
+        if (country) {
+            whereClause = {
+                name: {
+                    equals: country as string,
+                },
+            };
+        }
+
+        const countries = await prisma.country.findMany({
+            orderBy: {
+                name: "asc",
+            },
+            select: {
+                iso2: true,
+                iso3: true,
+                name: true,
+            },
+            where: whereClause,
+        });
+
+        const response = new APIResponse(countries, "").success();
+        res.status(200).send(response);
+    },
+
     getCountryRandom: async (req: Request, res: Response) => {
         const minMax = await prisma.country.aggregate({
             _max: {
