@@ -3,8 +3,11 @@
     "compilerOptions": {
         "outDir": "./dist",
         "rootDir": "./",
-        "noImplicitAny": true
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "module": "esnext",
+        "target": "ESNext"
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "tools/**/*"],
     "exclude": ["node_modules", "dist"]
 }

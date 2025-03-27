@@ -1,5 +1,6 @@
-import { v1Controller } from "#controllers/v1Controller.js";
 import express from "express";
+
+import { v1Controller } from "../../controllers/v1Controller";
 
 export const v1Router = express.Router();
 

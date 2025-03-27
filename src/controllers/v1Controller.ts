@@ -1,7 +1,8 @@
-import { prisma } from "#configs/prisma.js";
-import APIResponse from "#utils/APIResponse.js";
 import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
+
+import { prisma } from "../configs/prisma";
+import APIResponse from "../utils/APIResponse";
 
 export const v1Controller = {
     getCitiesByCountry: async (req: Request, res: Response) => {
