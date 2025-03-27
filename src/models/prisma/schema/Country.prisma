@@ -13,5 +13,5 @@ model Country {
     flagSvg         String
     dialCode        String
     states          State[]
-    populations     Population[]
+    populations     CountryPopulation[]
 }
