@@ -1,7 +1,0 @@
-model Population {
-    id          Int         @id @default(autoincrement())
-    countryId   Int
-    country     Country     @relation(fields: [countryId], references: [id])
-    year        Int
-    value       Int
-}

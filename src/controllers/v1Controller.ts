@@ -464,7 +464,7 @@ export const v1Controller = {
             orderVal = undefined;
         }
 
-        let orderByVal: Prisma.PopulationOrderByWithRelationInput;
+        let orderByVal: Prisma.CountryPopulationOrderByWithRelationInput;
         if (orderBy) {
             if (orderBy !== "year" && orderBy !== "population") {
                 orderByVal = { year: orderVal };
