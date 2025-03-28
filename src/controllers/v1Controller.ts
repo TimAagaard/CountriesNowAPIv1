@@ -432,6 +432,63 @@ export const v1Controller = {
         res.status(200).send(response);
     },
 
+    getPopulationsByCity: async (req: Request, res: Response) => {
+        const { city } = req.query;
+
+        if (!city) {
+            const response = new APIResponse(
+                null,
+                "The following fields are required: city",
+            );
+            res.status(400).send(response);
+            return;
+        }
+
+        const cityArray = await prisma.city.findMany({
+            include: {
+                populations: true,
+                state: {
+                    include: {
+                        country: true,
+                    },
+                },
+            },
+            where: {
+                AND: [
+                    {
+                        name: {
+                            equals: city as string,
+                        },
+                    },
+                    {
+                        NOT: {
+                            populations: {
+                                none: {},
+                            },
+                        },
+                    },
+                ],
+            },
+        });
+
+        const responseArray = cityArray.map((city) => {
+            return {
+                city: city.name,
+                country: city.state.country.name,
+                populationCounts: city.populations.map((population) => {
+                    return {
+                        source: population.source,
+                        value: population.value,
+                        year: population.year,
+                    };
+                }),
+                state: city.state.name,
+            };
+        });
+        const response = new APIResponse(responseArray, "").success();
+        res.status(200).send(response);
+    },
+
     getPopulationsFiltered: async (req: Request, res: Response) => {
         const { gt, limit, lt, order, orderBy, year } = req.query;
 
