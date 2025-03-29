@@ -7,7 +7,7 @@ continuing. If you do not install git-lfs first, you will have to manually
 download the database file `src/data/data.db` after cloning and place it in
 `/src/data/`.
 
-1. Run `git checkout https://github.com/TimAagaard/CountriesNowAPIv1.git`.
+1. Run `git clone https://github.com/TimAagaard/CountriesNowAPIv1.git`.
 
 ## Install:
 
