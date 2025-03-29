@@ -435,58 +435,81 @@ export const v1Controller = {
     getPopulationsByCity: async (req: Request, res: Response) => {
         const { city } = req.query;
 
-        if (!city) {
-            const response = new APIResponse(
-                null,
-                "The following fields are required: city",
-            );
-            res.status(400).send(response);
-            return;
-        }
-
-        const cityArray = await prisma.city.findMany({
-            include: {
-                populations: true,
-                state: {
-                    include: {
-                        country: true,
+        if (city) {
+            const cities = await prisma.city.findMany({
+                select: {
+                    name: true,
+                    populations: true,
+                    state: {
+                        select: {
+                            country: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            name: true,
+                        },
                     },
                 },
-            },
-            where: {
-                AND: [
-                    {
-                        name: {
-                            equals: city as string,
-                        },
-                    },
-                    {
-                        NOT: {
-                            populations: {
-                                none: {},
+                where: {
+                    AND: [
+                        {
+                            name: {
+                                equals: city as string,
                             },
                         },
+                        {
+                            NOT: [
+                                {
+                                    populations: {
+                                        none: {},
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            });
+            const response = new APIResponse(cities).success();
+            res.status(200).send(response);
+            return;
+        } else {
+            // Get All Cities with a population
+            // This is a much different query because selecting only cities that
+            // have populations is very slow through Prisma.
+            const populationIds = await prisma.cityPopulation.findMany({
+                distinct: ["cityId"],
+                select: {
+                    cityId: true,
+                },
+            });
+            const cities = await prisma.city.findMany({
+                select: {
+                    name: true,
+                    populations: true,
+                    state: {
+                        select: {
+                            country: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            name: true,
+                        },
                     },
-                ],
-            },
-        });
-
-        const responseArray = cityArray.map((city) => {
-            return {
-                city: city.name,
-                country: city.state.country.name,
-                populationCounts: city.populations.map((population) => {
-                    return {
-                        source: population.source,
-                        value: population.value,
-                        year: population.year,
-                    };
-                }),
-                state: city.state.name,
-            };
-        });
-        const response = new APIResponse(responseArray, "").success();
-        res.status(200).send(response);
+                },
+                take: 1, // This is clearly returning more than 1 record, 385 times this value to be exact.
+                where: {
+                    id: {
+                        in: populationIds.map((x) => x.cityId),
+                    },
+                },
+            });
+            console.log(cities.length);
+            const response = new APIResponse(cities).success();
+            res.status(200).send(response);
+            return;
+        }
     },
 
     getPopulationsFiltered: async (req: Request, res: Response) => {
