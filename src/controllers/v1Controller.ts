@@ -435,6 +435,19 @@ export const v1Controller = {
     getPopulationsByCity: async (req: Request, res: Response) => {
         const { city } = req.query;
 
+        interface populationType {
+            source: string;
+            value: number;
+            year: number;
+        }
+
+        interface returnDataType {
+            country: string;
+            name: string;
+            populationCounts: Map<number, populationType> | populationType[];
+            state: string;
+        }
+
         if (city) {
             const cities = await prisma.city.findMany({
                 select: {
@@ -470,13 +483,28 @@ export const v1Controller = {
                     ],
                 },
             });
-            const response = new APIResponse(cities).success();
+            const retVal: returnDataType[] = cities.map((city) => {
+                return {
+                    country: city.state.country.name,
+                    name: city.name,
+                    populationCounts: city.populations.map((population) => {
+                        return {
+                            source: population.source,
+                            value: population.value,
+                            year: population.year,
+                        };
+                    }),
+                    state: city.state.name,
+                };
+            });
+            const response = new APIResponse(retVal).success();
             res.status(200).send(response);
             return;
         } else {
             // Get All Cities with a population
-            // This is a much different query because selecting only cities that
-            // have populations is very slow through Prisma.
+            // Prisma's take function is bugged so this is commented out until
+            // it is fixed, and a raw query is used instead.
+            /*
             const populationIds = await prisma.cityPopulation.findMany({
                 distinct: ["cityId"],
                 select: {
@@ -505,8 +533,58 @@ export const v1Controller = {
                     },
                 },
             });
-            console.log(cities.length);
-            const response = new APIResponse(cities).success();
+            */
+
+            interface rawDataType {
+                city: string;
+                cityId: number;
+                country: string;
+                source: string;
+                state: string;
+                value: number;
+                year: number;
+            }
+
+            const data: rawDataType[] = await prisma.$queryRaw(
+                Prisma.sql`
+                    SELECT City.id AS 'cityId', Country.name AS 'country', State.name AS 'state', City.name AS 'city', CityPopulation.year, CityPopulation.value, CityPopulation.source
+                    FROM City
+                    JOIN CityPopulation ON City.id = CityPopulation.cityId
+                    JOIN State ON State.id = City.stateId
+                    JOIN Country ON Country.id = State.countryId
+                    WHERE City.id IN (SELECT DISTINCT CityPopulation.cityId FROM CityPopulation);
+                `,
+            );
+            const retVal: Map<number, returnDataType> = new Map<
+                number,
+                returnDataType
+            >();
+            for (const d of data) {
+                if (!retVal.has(d.cityId)) {
+                    retVal.set(d.cityId, {
+                        country: d.country,
+                        name: d.city,
+                        populationCounts: new Map<number, populationType>(),
+                        state: d.state,
+                    });
+                }
+
+                const populations = retVal.get(d.cityId)
+                    ?.populationCounts as Map<number, populationType>;
+
+                if (!populations.has(d.year)) {
+                    populations.set(d.year, {
+                        source: d.source,
+                        value: d.value,
+                        year: d.year,
+                    });
+                }
+            }
+
+            for (const r of retVal.values()) {
+                r.populationCounts = [...r.populationCounts.values()];
+            }
+            const response = new APIResponse([...retVal.values()]).success();
             res.status(200).send(response);
             return;
         }
