@@ -590,6 +590,40 @@ export const v1Controller = {
         }
     },
 
+    getPopulationsByCityFiltered: async (req: Request, res: Response) => {
+        const {
+            country = "",
+            limit = 100,
+            order = "DESC",
+            orderBy = "value",
+        } = req.query;
+
+        let whereQuery = Prisma.sql``;
+        if (country) {
+            whereQuery = Prisma.sql(["WHERE country = ", ""], country);
+        }
+
+        const results = await prisma.$queryRaw`
+            SELECT 
+                City.name AS 'name',
+                State.name AS 'state',
+                Country.name AS 'country',
+                CityPopulation.value,
+                CityPopulation.year,
+                CityPopulation.source
+            FROM CityPopulation
+            JOIN City ON City.id = CityPopulation.cityId
+            JOIN State ON State.id = City.stateId
+            JOIN Country ON Country.id = State.countryId
+            ${whereQuery}
+            ORDER BY ${Prisma.sql([orderBy as string])} ${Prisma.sql([order as string])}
+            LIMIT ${limit}
+        `;
+
+        const response = new APIResponse(results, "").success();
+        res.status(200).send(response);
+    },
+
     getPopulationsFiltered: async (req: Request, res: Response) => {
         const { gt, limit, lt, order, orderBy, year } = req.query;
 
