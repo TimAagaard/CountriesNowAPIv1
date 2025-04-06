@@ -5,6 +5,12 @@ import { prisma } from "../configs/prisma";
 import APIResponse from "../utils/APIResponse";
 
 export const v1Controller = {
+    getAllCountries: async (_req: Request, res: Response) => {
+        const results = await prisma.country.findMany();
+        const response = new APIResponse(results, "").success();
+        res.status(200).send(response);
+    },
+
     getCitiesByCountry: async (req: Request, res: Response) => {
         const { country, iso2 } = req.query;
 
