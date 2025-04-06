@@ -501,40 +501,6 @@ export const v1Controller = {
             res.status(200).send(response);
             return;
         } else {
-            // Get All Cities with a population
-            // Prisma's take function is bugged so this is commented out until
-            // it is fixed, and a raw query is used instead.
-            /*
-            const populationIds = await prisma.cityPopulation.findMany({
-                distinct: ["cityId"],
-                select: {
-                    cityId: true,
-                },
-            });
-            const cities = await prisma.city.findMany({
-                select: {
-                    name: true,
-                    populations: true,
-                    state: {
-                        select: {
-                            country: {
-                                select: {
-                                    name: true,
-                                },
-                            },
-                            name: true,
-                        },
-                    },
-                },
-                take: 1, // This is clearly returning more than 1 record, 385 times this value to be exact.
-                where: {
-                    id: {
-                        in: populationIds.map((x) => x.cityId),
-                    },
-                },
-            });
-            */
-
             interface rawDataType {
                 city: string;
                 cityId: number;
