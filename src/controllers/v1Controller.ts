@@ -118,6 +118,24 @@ export const v1Controller = {
         }
     },
 
+    getCountriesAndCities: async (_req: Request, res: Response) => {
+        // TODO: Add paging support, anything over 10k gets slow
+        const countries = await prisma.city.findMany({
+            include: {
+                state: {
+                    include: {
+                        country: true,
+                    },
+                },
+            },
+            take: 10000,
+        });
+
+        const response = new APIResponse(countries).success();
+        console.log("b");
+        res.status(200).send(response);
+    },
+
     getCountryCapital: async (req: Request, res: Response) => {
         const { country, iso2 } = req.query;
 

@@ -5,4 +5,6 @@ model CityPopulation {
     year        Int
     value       Int
     source      String
+
+    @@index([cityId])
 }

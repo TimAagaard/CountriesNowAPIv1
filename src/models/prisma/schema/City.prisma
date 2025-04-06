@@ -6,4 +6,6 @@ model City {
     latitude    Float
     longitude   Float
     populations CityPopulation[]
+
+    @@index([stateId])
 }

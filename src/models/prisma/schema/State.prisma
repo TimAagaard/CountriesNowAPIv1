@@ -5,4 +5,6 @@ model State {
     name        String
     code        String
     cities      City[]
+
+    @@index([countryId])
 }
