@@ -23,7 +23,7 @@ v1Router.get(
 );
 v1Router.get("/population/filter", v1Controller.getPopulationsFiltered);
 v1Router.get("/positions", v1Controller.getCountryPositions);
-v1Router.get("/positions/range");
+v1Router.get("/positions/range", v1Controller.getCountryPositionsByRange);
 v1Router.get("/random", v1Controller.getCountryRandom);
 v1Router.get("/states", v1Controller.getStatesByCountryOrISO2);
 v1Router.get("/state/cities", v1Controller.getCitiesByStateAndCountry);

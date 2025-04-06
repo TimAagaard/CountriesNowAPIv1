@@ -351,6 +351,51 @@ export const v1Controller = {
         res.status(200).send(response);
     },
 
+    getCountryPositionsByRange: async (req: Request, res: Response) => {
+        const { max, min, type } = req.query;
+
+        if (!type || !min || !max) {
+            const response = new APIResponse(null).error(
+                "The following parameters are required: min, max, type.",
+            );
+            res.status(400).send(response);
+            return;
+        }
+
+        let whereClause: Prisma.CountryWhereInput | undefined = undefined;
+
+        switch (type) {
+            case "lat":
+                whereClause = {
+                    latitude: {
+                        gte: parseFloat(min as string),
+                        lte: parseFloat(max as string),
+                    },
+                };
+                break;
+            case "long":
+                whereClause = {
+                    longitude: {
+                        gte: parseFloat(min as string),
+                        lte: parseFloat(max as string),
+                    },
+                };
+                break;
+            default: {
+                const response = new APIResponse(null).error(
+                    "type must be 'lat' or 'long'.",
+                );
+                res.status(400).send(response);
+                return;
+            }
+        }
+
+        const results = await prisma.country.findMany({ where: whereClause });
+        const response = new APIResponse(results, "").success();
+        res.status(200).send(response);
+        return;
+    },
+
     getCountryRandom: async (_req: Request, res: Response) => {
         const minMax = await prisma.country.aggregate({
             _max: {
