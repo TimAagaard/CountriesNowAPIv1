@@ -8,4 +8,5 @@ model City {
     populations CityPopulation[]
 
     @@index([stateId])
+    @@index([name])
 }

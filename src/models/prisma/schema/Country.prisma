@@ -14,4 +14,6 @@ model Country {
     dialCode        String
     states          State[]
     populations     CountryPopulation[]
+
+    @@index([name])
 }

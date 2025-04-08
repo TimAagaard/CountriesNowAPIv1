@@ -6,4 +6,6 @@ model CountryPopulation {
     value       Int
 
     @@index([countryId])
+    @@index([year])
+    @@index([value])
 }

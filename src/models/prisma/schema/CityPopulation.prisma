@@ -7,4 +7,6 @@ model CityPopulation {
     source      String
 
     @@index([cityId])
+    @@index([year])
+    @@index([value])
 }

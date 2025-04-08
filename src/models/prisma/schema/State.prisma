@@ -7,4 +7,5 @@ model State {
     cities      City[]
 
     @@index([countryId])
+    @@index([name])
 }
