@@ -1,8 +1,10 @@
 import express from "express";
 
+import { v2Controller } from "../../controllers/v2Controller";
+
 export const v2Router = express.Router();
 
-v2Router.get("/");
+v2Router.get("/", v2Controller.getAllCountries);
 v2Router.get("/:countryIdOrName");
 v2Router.get("/:countryIdOrName/states");
 v2Router.get("/:countryIdOrName/state/:stateIdOrName");
