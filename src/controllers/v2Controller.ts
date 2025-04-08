@@ -28,6 +28,29 @@ export const v2Controller = {
         res.status(200).send(response);
     },
 
+    getStateByIdOrName: async (req: Request, res: Response) => {
+        const { countryIdOrName, stateIdOrName } = req.params;
+        const results = await prisma.state.findMany({
+            include: {
+                country: true,
+            },
+            where: {
+                OR: [
+                    { id: { equals: parseInt(stateIdOrName) || undefined } },
+                    { name: { equals: stateIdOrName } },
+                ],
+            },
+        });
+        const response = new APIResponse(
+            results.filter(
+                (x) =>
+                    x.country.id === parseInt(countryIdOrName) ||
+                    x.country.name === countryIdOrName,
+            ),
+        );
+        res.status(200).send(response);
+    },
+
     getStatesByCountry: async (req: Request, res: Response) => {
         const { countryIdOrName } = req.params;
         const results = await prisma.country.findFirst({
