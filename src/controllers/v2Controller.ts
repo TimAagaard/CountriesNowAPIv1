@@ -27,4 +27,25 @@ export const v2Controller = {
         const response = new APIResponse(results).success();
         res.status(200).send(response);
     },
+
+    getStatesByCountry: async (req: Request, res: Response) => {
+        const { countryIdOrName } = req.params;
+        const results = await prisma.country.findFirst({
+            include: {
+                states: {
+                    orderBy: {
+                        name: "asc",
+                    },
+                },
+            },
+            where: {
+                OR: [
+                    { id: parseInt(countryIdOrName) || undefined },
+                    { name: { equals: countryIdOrName } },
+                ],
+            },
+        });
+        const response = new APIResponse(results?.states).success();
+        res.status(200).send(response);
+    },
 };
