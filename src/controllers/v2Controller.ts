@@ -13,4 +13,18 @@ export const v2Controller = {
         const response = new APIResponse(result, "").success();
         res.status(200).send(response);
     },
+
+    getCountryByIdOrName: async (req: Request, res: Response) => {
+        const { countryIdOrName } = req.params;
+        const results = await prisma.country.findFirst({
+            where: {
+                OR: [
+                    { id: parseInt(countryIdOrName) || undefined },
+                    { name: countryIdOrName },
+                ],
+            },
+        });
+        const response = new APIResponse(results).success();
+        res.status(200).send(response);
+    },
 };
