@@ -44,6 +44,35 @@ export const v2Controller = {
         res.status(200).send(response);
     },
 
+    getCityByCountryStateAndCity: async (req: Request, res: Response) => {
+        const { cityIdOrName, countryIdOrName, stateIdOrName } = req.params;
+        const results = await prisma.city.findMany({
+            include: {
+                state: {
+                    include: {
+                        country: true,
+                    },
+                },
+            },
+            where: {
+                OR: [
+                    { id: { equals: parseInt(cityIdOrName) || undefined } },
+                    { name: { equals: cityIdOrName } },
+                ],
+            },
+        });
+        const response = new APIResponse(
+            results.filter(
+                (x) =>
+                    (x.state.id === parseInt(stateIdOrName) ||
+                        x.state.name === stateIdOrName) &&
+                    (x.state.country.id === parseInt(countryIdOrName) ||
+                        x.state.country.name === countryIdOrName),
+            ),
+        ).success();
+        res.status(200).send(response);
+    },
+
     getCountryByIdOrName: async (req: Request, res: Response) => {
         const { countryIdOrName } = req.params;
         const results = await prisma.country.findFirst({
