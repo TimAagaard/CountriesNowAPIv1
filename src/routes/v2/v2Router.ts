@@ -33,4 +33,5 @@ v2Router.get(
 );
 v2Router.get(
     "/:countryIdOrName/state/:stateIdOrName/city/:cityIdOrName/within/:distanceAmount/:distanceUnit",
+    v2Controller.getCitiesByDistanceFromCity,
 );
