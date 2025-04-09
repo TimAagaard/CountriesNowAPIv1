@@ -42,7 +42,8 @@
     },
     "dependencies": {
         "@prisma/client": "^6.5.0",
-        "express": "^4.21.2"
+        "express": "^4.21.2",
+        "geolib": "^3.3.4"
     },
     "imports": {
         "#*": "./src/*"

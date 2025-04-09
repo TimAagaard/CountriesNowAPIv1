@@ -27,5 +27,10 @@ v2Router.get(
     "/cities/between/:lat1/:lon1/:lat2/:lon2",
     v2Controller.getCitiesBetweenLatitudeAndLongitude,
 );
-v2Router.get("/within/:distanceAmount/:distanceUnit");
-v2Router.get("/cities/within/:distanceAmount/:distanceUnit");
+v2Router.get(
+    "/:countryIdOrName/within/:distanceAmount/:distanceUnit",
+    v2Controller.getCountriesByDistanceFromCountry,
+);
+v2Router.get(
+    "/:countryIdOrName/state/:stateIdOrName/city/:cityIdOrName/within/:distanceAmount/:distanceUnit",
+);
