@@ -19,5 +19,8 @@ export default tseslint.config(
             },
         },
     },
+    {
+        extends: ["plugins:openapi/recommended"],
+    },
     perfectionist.configs["recommended-natural"],
 );

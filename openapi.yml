@@ -1,0 +1,247 @@
+openapi: 3.0.3
+info:
+    title: CountriesNowAPI
+    version: 1.0.0
+components:
+    schemas:
+        DistanceUnit:
+            type: string
+            enum:
+                - mi
+                - km
+        Error:
+            type: object
+            properties:
+                error:
+                    type: boolean
+                msg:
+                    type: string
+                data:
+                    type: null
+            example:
+                error: true
+                msg: The reason for your error
+                data: null
+
+        City:
+            type: object
+            properties:
+                id:
+                    type: integer
+                stateId:
+                    type: integer
+                name:
+                    type: string
+                latitude:
+                    type: number
+                longitude:
+                    type: number
+                state:
+                    $ref: "#/components/schemas/State"
+            example:
+                id: 2104754
+                stateId: 3298
+                name: Ithaca
+                latitude: 42.4396039
+                longitude: -76.4968019
+                state:
+                    id: 3298
+                    countryId: 236
+                    name: New York
+                    code: NY
+                    country:
+                        id: 236
+                        name: United States
+                        iso2: US
+                        iso3: USA
+                        latitude: 38
+                        longitude: -97
+                        continent: Americas
+                        currencyName: United States dollar
+                        currencyCode: USD
+                        unicode: 🇺🇸
+                        capital: Washington
+                        flagSvg: https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg
+                        dialCode: 1
+
+        State:
+            type: object
+            properties:
+                id:
+                    type: integer
+                countryId:
+                    type: integer
+                name:
+                    type: string
+                code:
+                    type: string
+                country:
+                    $ref: "#/components/schemas/Country"
+            example:
+                id: 3298
+                countryId: 236
+                name: New York
+                code: NY
+                country:
+                    id: 236
+                    name: United States
+                    iso2: US
+                    iso3: USA
+                    latitude: 38
+                    longitude: -97
+                    continent: Americas
+                    currencyName: United States dollar
+                    currencyCode: USD
+                    unicode: 🇺🇸
+                    capital: Washington
+                    flagSvg: https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg
+                    dialCode: 1
+
+        Country:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    description: The unique ID of the Country.
+                name:
+                    type: string
+                iso2:
+                    type: string
+                iso3:
+                    type: string
+                latitude:
+                    type: number
+                longitude:
+                    type: number
+                continent:
+                    type: string
+                currencyName:
+                    type: string
+                currencyCode:
+                    type: string
+                unicode:
+                    type: string
+                capital:
+                    type: string
+                flagSvg:
+                    type: string
+                dialCode:
+                    type: string
+            example:
+                id: 236
+                name: United States
+                iso2: US
+                iso3: USA
+                latitude: 38
+                longitude: -97
+                continent: Americas
+                currencyName: United States dollar
+                currencyCode: USD
+                unicode: 🇺🇸
+                capital: Washington
+                flagSvg: https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg
+                dialCode: 1
+
+        CountryArray:
+            type: array
+            properties:
+                id:
+                    type: integer
+                    description: The unique ID of the Country.
+                name:
+                    type: string
+                iso2:
+                    type: string
+                iso3:
+                    type: string
+                latitude:
+                    type: number
+                longitude:
+                    type: number
+                continent:
+                    type: string
+                currencyName:
+                    type: string
+                currencyCode:
+                    type: string
+                unicode:
+                    type: string
+                capital:
+                    type: string
+                flagSvg:
+                    type: string
+                dialCode:
+                    type: string
+            example:
+                - id: 236
+                  name: United States
+                  iso2: US
+                  iso3: USA
+                  latitude: 38
+                  longitude: -97
+                  continent: Americas
+                  currencyName: United States dollar
+                  currencyCode: USD
+                  unicode: 🇺🇸
+                  capital: Washington
+                  flagSvg: https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg
+                  dialCode: 1
+                - id: 39
+                  name: Canada
+                  iso2: CA
+                  iso3: CAN
+                  latitude: 60
+                  longitude: -95
+                  continent: Americas
+                  currencyName: Canadian dollar
+                  currencyCode: CAD
+                  unicode: 🇨🇦
+                  capital: Ottawa
+                  flagSvg: https://upload.wikimedia.org/wikipedia/en/c/cf/Flag_of_Canada.svg
+                  dialCode: 1
+
+        StateArray:
+            type: array
+            properties:
+                id:
+                    type: integer
+                countryId:
+                    type: integer
+                name:
+                    type: string
+                code:
+                    type: string
+            example:
+                - id: 3286
+                  countryId: 236
+                  name: Alabama
+                  code: AL
+                - id: 3281
+                  countryId: 236
+                  name: Alaska
+                  code: AK
+
+        CityArray:
+            type: array
+            properties:
+                id:
+                    type: integer
+                stateId:
+                    type: integer
+                name:
+                    type: string
+                latitude:
+                    type: number
+                longitude:
+                    type: number
+            example:
+                - id: 2014384
+                  stateId: 3272
+                  name: Adams
+                  latitude: 37.4586284
+                  longitude: -97.9775583
+                - id: 2014368
+                  stateId: 3272
+                  name: Adamsville
+                  latitude: 37.1733592
+                  longitude: -97.1764298

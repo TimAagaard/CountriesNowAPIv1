@@ -31,7 +31,9 @@
         "@tsconfig/node22": "^22.0.0",
         "@types/express": "^5.0.0",
         "@types/node": "^22.13.9",
+        "@types/swagger-ui-express": "^4.1.8",
         "eslint": "^9.21.0",
+        "eslint-plugin-openapi": "^0.0.4",
         "eslint-plugin-perfectionist": "^4.9.0",
         "glob": "^11.0.1",
         "prettier": "^3.5.3",
@@ -43,7 +45,9 @@
     "dependencies": {
         "@prisma/client": "^6.5.0",
         "express": "^4.21.2",
-        "geolib": "^3.3.4"
+        "geolib": "^3.3.4",
+        "swagger-ui-express": "^5.0.1",
+        "openapi-comment-parser": "^1.0.0"
     },
     "imports": {
         "#*": "./src/*"
