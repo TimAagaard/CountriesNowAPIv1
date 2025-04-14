@@ -7,6 +7,7 @@ import APIResponse from "../utils/APIResponse";
 export const v2Controller = {
     /**
      * GET /api/v2/countries
+     * @tag v2
      * @summary Returns all countries.
      * @description Returns all countries sorted by name ascendingly.
      * @response 200 - An APIRequest object with the data key's value set to an array of countries.
@@ -24,6 +25,7 @@ export const v2Controller = {
 
     /**
      * GET /api/v2/countries/cities/between/{lat1}/{lon1}/{lat2}/{lon2}
+     * @tag v2
      * @summary Returns all cities between the specified latitudes and longitudes.
      * @description Returns all cities between the specified latitudes and longitudes sorted by name ascendingly.
      * @pathParam {number} lat1 - Latitude of coordinate one.
@@ -71,6 +73,7 @@ export const v2Controller = {
 
     /**
      * GET /api/v2/countries/{countryIdOrName}/state/{stateIdOrName}/cities
+     * @tag v2
      * @summary Gets all cities in the specified country and state.
      * @description Gets all cities in the specified country and state sorted by city name ascendingly.
      * @pathParam {string} countryIdOrName - The ID or name of the country.
@@ -110,6 +113,7 @@ export const v2Controller = {
 
     /**
      * GET /api/v2/countries/{countryIdOrName}/state/{stateIdOrName}/city/{cityIdOrName}/within/{distanceAmount}/{distanceUnit}
+     * @tag v2
      * @summary Gets all cities within the specified distance from the specified city.
      * @description Gets all cities within the specified distance from the specified city sorted by name ascendingly.
      * @pathParam {string} countryIdOrName - The ID or name of the country.
@@ -229,6 +233,7 @@ export const v2Controller = {
 
     /**
      * GET /api/v2/countries/{countryIdOrName}/state/{stateIdOrName}/city/{cityIdOrName}
+     * @tag v2
      * @summary Gets the City specified as well as the associated State and Country.
      * @description Gets the City specified as well as the associated State and Country.
      * @pathParam {string} countryIdOrName - The ID or name of the country.
@@ -268,6 +273,7 @@ export const v2Controller = {
 
     /**
      * GET /api/v2/countries/between/{lat1}/{lon1}/{lat2}/{lon2}
+     * @tag v2
      * @summary Gets all countries within the specified latitudes and longitudes.
      * @description Gets all countries within the specified latitudes and longitudes sorted by name ascendingly.
      * @pathParam {number} lat1 - Latitude of coordinate one.
@@ -315,6 +321,7 @@ export const v2Controller = {
 
     /**
      * GET /api/v2/countries/{countryIdOrName}/within/{distanceAmount}/{distanceUnit}
+     * @tag v2
      * @summary Gets all countries within the specified distance of the specified country.
      * @description Gets all countries within the specified distance of the specified country sorted by name ascendingly.
      * @pathParam {string} countryIdOrName - The ID or name of the country.
@@ -423,6 +430,7 @@ export const v2Controller = {
 
     /**
      * GET /api/v2/countries/{countryIdOrName}
+     * @tag v2
      * @summary Gets the specified country.
      * @description Gets the specified country.
      * @pathParam {string} countryIdOrName - The ID or name of the country.
@@ -446,6 +454,7 @@ export const v2Controller = {
 
     /**
      * GET /api/v2/countries/{countryIdOrName}/state/{stateIdOrName}
+     * @tag v2
      * @summary Gets the specified state.
      * @description Gets the specified state.
      * @pathParam {string} countryIdOrName - The ID or name of the country.
@@ -478,6 +487,7 @@ export const v2Controller = {
 
     /**
      * GET /api/v2/countries/{countryIdOrName}/states
+     * @tag v2
      * @summary Gets the states in the specified country.
      * @description Gets the states in the specified country.
      * @pathParam {string} countryIdOrName - The ID or name of the country.
