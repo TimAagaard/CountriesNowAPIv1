@@ -7,7 +7,8 @@ import path from "path";
 export const app: Express = express();
 export const EXPRESS_PORT: number | string = process.env.PORT ?? 3000;
 
-const USE_HTTPS = process.env.NODE_ENV !== "local";
+const USE_HTTPS =
+    process.env.NODE_ENV !== "local" && process.env.NODE_ENV !== "test";
 
 export function startExpressServer() {
     let server;
@@ -34,6 +35,8 @@ export function startExpressServer() {
     process.on("SIGTERM", (server: http.Server | https.Server) => {
         shutdownHandler(server);
     });
+
+    return server;
 }
 
 function shutdownHandler(server: http.Server | https.Server) {
