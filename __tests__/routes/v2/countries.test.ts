@@ -1,6 +1,7 @@
 import request from "supertest";
 import https from "https";
 import http from "http";
+import "jest-sorted";
 
 import { app, startExpressServer } from "../../../src/configs/express";
 import { versionRouter } from "../../../src/routes/versionRouter";
@@ -36,11 +37,121 @@ afterAll((done) => {
 describe("Country routes", () => {
     test("Get all countries", async () => {
         const res = await request(server).get("/api/v2/countries");
+
         expect(res.status).toEqual(200);
         expect(res.body.data[0]).toEqual(
             expect.objectContaining<Country>({
                 id: expect.any(Number),
                 name: expect.any(String),
+                iso2: expect.any(String),
+                iso3: expect.any(String),
+                latitude: expect.any(Number),
+                longitude: expect.any(Number),
+                continent: expect.any(String),
+                currencyName: expect.any(String),
+                currencyCode: expect.any(String),
+                unicode: expect.any(String),
+                capital: expect.any(String),
+                flagSvg: expect.any(String),
+                dialCode: expect.any(String),
+            }),
+        );
+    });
+
+    test("Get countries between latitude and longitude", async () => {
+        const res = await request(server).get(
+            "/api/v2/countries/between/20/-120/50/-80",
+        );
+
+        expect(res.status).toEqual(200);
+        expect(res.body.data[0]).toEqual(
+            expect.objectContaining<Country>({
+                id: expect.any(Number),
+                name: expect.any(String),
+                iso2: expect.any(String),
+                iso3: expect.any(String),
+                latitude: expect.any(Number),
+                longitude: expect.any(Number),
+                continent: expect.any(String),
+                currencyName: expect.any(String),
+                currencyCode: expect.any(String),
+                unicode: expect.any(String),
+                capital: expect.any(String),
+                flagSvg: expect.any(String),
+                dialCode: expect.any(String),
+            }),
+        );
+        expect(res.body.data.length).toBeGreaterThan(1);
+        expect(res.body.data).toBeSortedBy("name");
+    });
+
+    test("Get countries by distance from country", async () => {
+        let res = await request(server).get(
+            "/api/v2/countries/Jamaica/within/500/km",
+        );
+        expect(res.status).toEqual(200);
+        expect(res.body.data[0]).toEqual(
+            expect.objectContaining<Country>({
+                id: expect.any(Number),
+                name: expect.any(String),
+                iso2: expect.any(String),
+                iso3: expect.any(String),
+                latitude: expect.any(Number),
+                longitude: expect.any(Number),
+                continent: expect.any(String),
+                currencyName: expect.any(String),
+                currencyCode: expect.any(String),
+                unicode: expect.any(String),
+                capital: expect.any(String),
+                flagSvg: expect.any(String),
+                dialCode: expect.any(String),
+            }),
+        );
+        expect(res.body.data.length).toBeGreaterThan(1);
+        expect(res.body.data).toBeSortedBy("name");
+
+        res = await request(server).get(
+            "/api/v2/countries/Jamaica/within/311/mi",
+        );
+        expect(res.status).toEqual(200);
+        expect(res.body.data[0]).toEqual(
+            expect.objectContaining<Country>({
+                id: expect.any(Number),
+                name: expect.any(String),
+                iso2: expect.any(String),
+                iso3: expect.any(String),
+                latitude: expect.any(Number),
+                longitude: expect.any(Number),
+                continent: expect.any(String),
+                currencyName: expect.any(String),
+                currencyCode: expect.any(String),
+                unicode: expect.any(String),
+                capital: expect.any(String),
+                flagSvg: expect.any(String),
+                dialCode: expect.any(String),
+            }),
+        );
+        expect(res.body.data.length).toBeGreaterThan(1);
+        expect(res.body.data).toBeSortedBy("name");
+
+        res = await request(server).get(
+            "/api/v2/countries/Jamaica/within/50/ab",
+        );
+        expect(res.status).toEqual(400);
+
+        res = await request(server).get(
+            "/api/v2/countries/Jamrock/within/500/km",
+        );
+        expect(res.status).toEqual(404);
+    });
+
+    test("Get country by ID or name", async () => {
+        const res = await request(server).get("/api/v2/countries/Italy");
+        expect(res.status).toEqual(200);
+        expect(res.body.data).toEqual(
+            expect.objectContaining<Country>({
+                id: expect.any(Number),
+                name: "Italy",
                 iso2: expect.any(String),
                 iso3: expect.any(String),
                 latitude: expect.any(Number),
