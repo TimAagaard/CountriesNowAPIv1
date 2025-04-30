@@ -16,12 +16,14 @@ export default async function (req: Request, res: Response) {
             ],
         },
     });
+
     const response = new APIResponse(
         results.filter(
             (x) =>
                 x.country.id === parseInt(countryIdOrName) ||
                 x.country.name === countryIdOrName,
-        ),
-    );
+        )[0],
+    ).success();
+
     res.status(200).send(response);
 }
