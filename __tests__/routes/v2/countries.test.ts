@@ -1,13 +1,7 @@
 import request from "supertest";
-import https from "https";
-import http from "http";
 import "jest-sorted";
 
 import { server } from "../../../testConfig";
-import { app, startExpressServer } from "../../../src/configs/express";
-import { versionRouter } from "../../../src/routes/versionRouter";
-
-//let server: https.Server | http.Server;
 
 type Country = {
     id: number;
@@ -24,18 +18,6 @@ type Country = {
     flagSvg: string;
     dialCode: string;
 };
-
-/*
-beforeAll((done) => {
-    app.use("/api", versionRouter);
-    server = startExpressServer();
-    done();
-});
-
-afterAll((done) => {
-    server.close(done);
-});
-*/
 
 describe("Country routes", () => {
     test("Get all countries", async () => {
