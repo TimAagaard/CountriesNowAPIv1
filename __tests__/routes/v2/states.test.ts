@@ -3,10 +3,11 @@ import https from "https";
 import http from "http";
 import "jest-sorted";
 
+import { server } from "../../../testConfig";
 import { app, startExpressServer } from "../../../src/configs/express";
 import { versionRouter } from "../../../src/routes/versionRouter";
 
-let server: https.Server | http.Server;
+//let server: https.Server | http.Server;
 
 type Country = {
     id: number;
@@ -32,6 +33,7 @@ type State = {
     country?: Country;
 };
 
+/*
 beforeAll((done) => {
     app.use("/api", versionRouter);
     server = startExpressServer();
@@ -41,6 +43,7 @@ beforeAll((done) => {
 afterAll((done) => {
     server.close(done);
 });
+*/
 
 describe("State routes", () => {
     test("Get state by ID or name", async () => {
@@ -87,6 +90,10 @@ describe("State routes", () => {
                 code: expect.any(String),
             }),
         );
-        expect(res.body.data).toBeSortedBy("name");
+        expect(res.body.data).toBeSorted({
+            compare: (a, b) => {
+                return a.name.localeCompare(b.name);
+            },
+        });
     });
 });

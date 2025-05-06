@@ -15,5 +15,6 @@ export default {
         "^(\\.{1,2}/.*)\\.js$": "$1",
     },
     extensionsToTreatAsEsm: [".ts", ".tsx", ".mts"],
-    setupFilesAfterEnv: ["jest-sorted"],
+    setupFilesAfterEnv: ["jest-sorted", "<rootDir>/testConfig.ts"],
+    setupFiles: ["<rootDir>/testEnv.ts"],
 };

@@ -3,10 +3,11 @@ import https from "https";
 import http from "http";
 import "jest-sorted";
 
+import { server } from "../../../testConfig";
 import { app, startExpressServer } from "../../../src/configs/express";
 import { versionRouter } from "../../../src/routes/versionRouter";
 
-let server: https.Server | http.Server;
+//let server: https.Server | http.Server;
 
 type Country = {
     id: number;
@@ -24,6 +25,7 @@ type Country = {
     dialCode: string;
 };
 
+/*
 beforeAll((done) => {
     app.use("/api", versionRouter);
     server = startExpressServer();
@@ -33,6 +35,7 @@ beforeAll((done) => {
 afterAll((done) => {
     server.close(done);
 });
+*/
 
 describe("Country routes", () => {
     test("Get all countries", async () => {
@@ -82,7 +85,11 @@ describe("Country routes", () => {
             }),
         );
         expect(res.body.data.length).toBeGreaterThan(1);
-        expect(res.body.data).toBeSortedBy("name");
+        expect(res.body.data).toBeSorted({
+            compare: (a, b) => {
+                return a.name.localeCompare(b.name);
+            },
+        });
     });
 
     test("Get countries by distance from country", async () => {
@@ -108,7 +115,11 @@ describe("Country routes", () => {
             }),
         );
         expect(res.body.data.length).toBeGreaterThan(1);
-        expect(res.body.data).toBeSortedBy("name");
+        expect(res.body.data).toBeSorted({
+            compare: (a, b) => {
+                return a.name.localeCompare(b.name);
+            },
+        });
 
         res = await request(server).get(
             "/api/v2/countries/Jamaica/within/311/mi",
@@ -132,7 +143,11 @@ describe("Country routes", () => {
             }),
         );
         expect(res.body.data.length).toBeGreaterThan(1);
-        expect(res.body.data).toBeSortedBy("name");
+        expect(res.body.data).toBeSorted({
+            compare: (a, b) => {
+                return a.name.localeCompare(b.name);
+            },
+        });
 
         res = await request(server).get(
             "/api/v2/countries/Jamaica/within/50/ab",

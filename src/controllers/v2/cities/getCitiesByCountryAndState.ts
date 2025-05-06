@@ -28,7 +28,8 @@ export default async function (req: Request, res: Response) {
                     x.country.name === countryIdOrName ||
                     x.country.id === parseInt(countryIdOrName),
             )
-            .map((x) => x.cities),
+            .map((x) => x.cities)[0]
+            .sort((a, b) => a.name.localeCompare(b.name)),
     ).success();
     res.status(200).send(response);
 }

@@ -27,7 +27,7 @@ export default async function (req: Request, res: Response) {
                     x.state.name === stateIdOrName) &&
                 (x.state.country.id === parseInt(countryIdOrName) ||
                     x.state.country.name === countryIdOrName),
-        ),
+        )[0],
     ).success();
     res.status(200).send(response);
 }
